@@ -20,8 +20,8 @@ List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getA
 		<%
 		for (Map<String, Object> articleRow : articleRows) {
 		%>
-		<li><%=(int) articleRow.get("id")%>¹ø, <%=(String) articleRow.get("regDate")%>,
-			<%=(String) articleRow.get("title")%></li>
+		<li><a href="detail?id=<%=(int) articleRow.get("id")%>"><%=(int) articleRow.get("id")%>¹ø, <%=(String) articleRow.get("regDate")%>,
+			<%=(String) articleRow.get("title")%></a></li>
 		<%
 		}
 		%>
