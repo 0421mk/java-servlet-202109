@@ -19,8 +19,8 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ArticleListServlet
  */
-@WebServlet("/article/doDelete")
-public class ArticleDeleteServlet extends HttpServlet {
+@WebServlet("/article/doWrite")
+public class ArticleWriteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -47,14 +47,18 @@ public class ArticleDeleteServlet extends HttpServlet {
 
 			DBUtil dbUtil = new DBUtil(request, response);
 			
-			int id = Integer.parseInt(request.getParameter("id"));
+			String title = request.getParameter("title");
+			String body = request.getParameter("body");
 
 			SecSql sql = new SecSql();
 
-			sql.append("Delete FROM article WHERE id = ?", id);
+			sql.append("INSERT INTO article");
+			sql.append("SET regDate = NOW()");
+			sql.append(", title = ?", title);
+			sql.append(", body = ?", body);
 			
-			dbUtil.delete(conn, sql);
-			response.getWriter().append(String.format("<script>alert('%d번 글이 삭제되었습니다.'); location.replace('list')</script>", id));
+			int id = dbUtil.insert(conn, sql);
+			response.getWriter().append(String.format("<script>alert('%d번 글이 생성되었습니다.'); location.replace('list')</script>", id));
 			
 			
 		} catch (SQLException e) {
