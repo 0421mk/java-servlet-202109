@@ -52,15 +52,19 @@ int totalPage = (int) request.getAttribute("totalPage");
 		</tbody>
 	</table>
 	<div class="page">
-
+		<% if (nowPage > 1) { %>
+		<a href="list?page=1">◀◀</a>
+		<% } %>
 		<%
-		for (int i = 1; i <= totalPage; i++) {
+		int from = (nowPage - 5 > 0) ? nowPage - 5 : 1;
+		int end = (nowPage + 5 > totalPage) ? totalPage : nowPage + 5;
+		for (int i = from; i <= end; i++) {
 		%>
 		<a class="<%=nowPage == i ? "red" : ""%>" href="list?page=<%=i%>"><%=i%></a>
-		<%
-		}
-		%>
-
+		<% } %>
+		<% if (totalPage > nowPage) { %>
+		<a href="list?page=<%=totalPage%>">▶▶</a>
+		<% } %>
 	</div>
 	<style>
 .red {
