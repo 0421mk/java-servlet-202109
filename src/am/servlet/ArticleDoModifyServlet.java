@@ -19,8 +19,8 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ArticleListServlet
  */
-@WebServlet("/article/doWrite")
-public class ArticleDoWriteServlet extends HttpServlet {
+@WebServlet("/article/doModify")
+public class ArticleDoModifyServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,17 +50,19 @@ public class ArticleDoWriteServlet extends HttpServlet {
 
 			String title = request.getParameter("title");
 			String body = request.getParameter("body");
+			int id = Integer.parseInt(request.getParameter("id"));
 
 			SecSql sql = new SecSql();
 
-			sql.append("INSERT INTO article");
-			sql.append("SET regDate = NOW()");
-			sql.append(", title = ?", title);
+			sql.append("UPDATE article");
+			sql.append("SET title = ?", title);
 			sql.append(", body = ?", body);
+			sql.append("WHERE id = ?", id);
+			
+			DBUtil.update(conn, sql);
 
-			int id = dbUtil.insert(conn, sql);
 			response.getWriter()
-					.append(String.format("<script>alert('%d번 글이 생성되었습니다.'); location.replace('list')</script>", id));
+					.append(String.format("<script>alert('%d번 글이 수정되었습니다.'); location.replace('detail?id=%d')</script>", id, id));
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

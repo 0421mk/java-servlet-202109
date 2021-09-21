@@ -1,26 +1,30 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Map"%>
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <%
 Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("articleRow");
-// °¡Á®¿À´Â °ªÀº String => Çüº¯È¯ÇØÁà¾ßÇÔ
+// ê°€ì ¸ì˜¤ëŠ” ê°’ì€ String => í˜•ë³€í™˜í•´ì¤˜ì•¼í•¨
 %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>°Ô½Ã¹° »ó¼¼</title>
+<meta charset="UTF-8">
+<title>ê²Œì‹œë¬¼ ìƒì„¸</title>
 </head>
 <body>
-	<h1>°Ô½Ã¹° ¸®½ºÆ®</h1>
+	<h1>ê²Œì‹œë¬¼ ë¦¬ìŠ¤íŠ¸</h1>
 	
-	<div>¹øÈ£ : <%=(int)articleRow.get("id")%></div>
-	<div>³¯Â¥ : <%=(String)articleRow.get("regDate")%></div>
-	<div>Á¦¸ñ : <%=(String)articleRow.get("title")%></div>
-	<div>³»¿ë : <%=(String)articleRow.get("body")%></div>
-	<div><a href="list">¸®½ºÆ®·Î µ¹¾Æ°¡±â</a></div>
+	<div>ë²ˆí˜¸ : <%=(int)articleRow.get("id")%></div>
+	<div>ë‚ ì§œ : <%=(String)articleRow.get("regDate")%></div>
+	<div>ì œëª© : <%=(String)articleRow.get("title")%></div>
+	<div>ë‚´ìš© : <%=(String)articleRow.get("body")%></div>
+	<div>
+	<a href="modify?id=<%=(int)articleRow.get("id")%>">ìˆ˜ì •</a>
+	<a href="doDelete?id=<%=(int)articleRow.get("id")%>">ì‚­ì œ</a>
+	<a href="list">ë¦¬ìŠ¤íŠ¸ë¡œ ëŒì•„ê°€ê¸°</a>
+	</div>
 
 </body>
 </html>

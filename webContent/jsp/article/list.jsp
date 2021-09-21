@@ -1,25 +1,25 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Map"%>
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <%
 List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getAttribute("articleRows");
-// °¡Á®¿À´Â °ªÀº String => Çüº¯È¯ÇØÁà¾ßÇÔ
+// ê°€ì ¸ì˜¤ëŠ” ê°’ì€ String => í˜•ë³€í™˜í•´ì¤˜ì•¼í•¨
 int nowPage = (int) request.getAttribute("page");
 int totalPage = (int) request.getAttribute("totalPage");
 %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>°Ô½Ã¹° ¸®½ºÆ®</title>
+<meta charset="UTF-8">
+<title>ê²Œì‹œë¬¼ ë¦¬ìŠ¤íŠ¸</title>
 </head>
 <body>
-	<h1>°Ô½Ã¹° ¸®½ºÆ®</h1>
-	
+	<h1>ê²Œì‹œë¬¼ ë¦¬ìŠ¤íŠ¸</h1>
+
 	<div>
-		<a href="write">°Ô½Ã¹° ÀÛ¼º</a>
+		<a href="write">ê²Œì‹œë¬¼ ìž‘ì„±</a>
 	</div>
 
 	<table>
@@ -29,10 +29,10 @@ int totalPage = (int) request.getAttribute("totalPage");
 		</colgroup>
 		<thead>
 			<tr>
-				<th>¹øÈ£</th>
-				<th>³¯Â¥</th>
-				<th>Á¦¸ñ</th>
-				<th>ºñ°í</th>
+				<th>ë²ˆí˜¸</th>
+				<th>ë‚ ì§œ</th>
+				<th>ì œëª©</th>
+				<th>ë¹„ê³ </th>
 			</tr>
 		</thead>
 		<tbody>
@@ -43,7 +43,8 @@ int totalPage = (int) request.getAttribute("totalPage");
 				<td><%=articleRow.get("id")%></td>
 				<td><%=articleRow.get("regDate")%></td>
 				<td><a href="detail?id=<%=articleRow.get("id")%>"><%=articleRow.get("title")%></a></td>
-				<td><a href="doDelete?id=<%=articleRow.get("id")%>">»èÁ¦ÇÏ±â</a></td>
+				<td><a href="modify?id=<%=articleRow.get("id")%>">ìˆ˜ì • </a><a
+					href="doDelete?id=<%=articleRow.get("id")%>">ì‚­ì œ</a></td>
 			</tr>
 			<%
 			}
@@ -51,17 +52,21 @@ int totalPage = (int) request.getAttribute("totalPage");
 		</tbody>
 	</table>
 	<div class="page">
-		
-		<% for(int i = 1; i <= totalPage; i++) { %>
-		<a class="<%=nowPage == i ? "red" : "" %>" href="list?page=<%=i%>"><%=i%></a>
-		<% } %>
-		
+
+		<%
+		for (int i = 1; i <= totalPage; i++) {
+		%>
+		<a class="<%=nowPage == i ? "red" : ""%>" href="list?page=<%=i%>"><%=i%></a>
+		<%
+		}
+		%>
+
 	</div>
 	<style>
-	.red {
-		color: red;
-		font-weight: bold;
-	}
-	</style>
+.red {
+	color: red;
+	font-weight: bold;
+}
+</style>
 </body>
 </html>

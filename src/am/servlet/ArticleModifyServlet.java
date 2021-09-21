@@ -4,28 +4,22 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
-import am.util.SecSql;
-
 import am.util.DBUtil;
+import am.util.SecSql;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class ArticleListServlet
- */
-@WebServlet("/article/doWrite")
-public class ArticleDoWriteServlet extends HttpServlet {
+@WebServlet("/article/modify")
+public class ArticleModifyServlet extends HttpServlet {
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		response.setContentType("text/html; charset=UTF-8");
 		String url = "jdbc:mysql://localhost:3306/am?ServerTimeZone=UTC";
 		String user = "root";
@@ -47,20 +41,16 @@ public class ArticleDoWriteServlet extends HttpServlet {
 			conn = DriverManager.getConnection(url, user, password);
 
 			DBUtil dbUtil = new DBUtil(request, response);
-
-			String title = request.getParameter("title");
-			String body = request.getParameter("body");
+			
+			int id = Integer.parseInt(request.getParameter("id"));
 
 			SecSql sql = new SecSql();
 
-			sql.append("INSERT INTO article");
-			sql.append("SET regDate = NOW()");
-			sql.append(", title = ?", title);
-			sql.append(", body = ?", body);
-
-			int id = dbUtil.insert(conn, sql);
-			response.getWriter()
-					.append(String.format("<script>alert('%d번 글이 생성되었습니다.'); location.replace('list')</script>", id));
+			sql.append("SELECT * FROM article WHERE id = ?", id);
+			Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
+			
+			request.setAttribute("articleRow", articleRow);
+			request.getRequestDispatcher("/jsp/article/modify.jsp").forward(request, response);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -75,14 +65,7 @@ public class ArticleDoWriteServlet extends HttpServlet {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		doGet(request, response);
-
+		
 	}
 
 }

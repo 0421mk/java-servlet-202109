@@ -26,7 +26,7 @@ public class ArticleDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html charset=UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		String url = "jdbc:mysql://localhost:3306/am?ServerTimeZone=UTC";
 		String user = "root";
 		String password = "";

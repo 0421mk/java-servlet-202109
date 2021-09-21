@@ -1,21 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>°Ô½Ã¹° ÀÛ¼º</title>
+<meta charset="UTF-8">
+<title>ê²Œì‹œë¬¼ ìž‘ì„±</title>
 </head>
 <body>
-	<h1>°Ô½Ã¹° ÀÛ¼º</h1>
+	<h1>ê²Œì‹œë¬¼ ìž‘ì„±</h1>
 	
 	<form action="doWrite" method="POST">
-		<div>Á¦¸ñ : <input placeholder="Á¦¸ñÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä." type="text" name="title" /></div>
-		<div>³»¿ë : <textarea placeholder="³»¿ëÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä." name="body" /></textarea></div>
+		<div>ì œëª© : <input placeholder="ì œëª©ì„ ìž…ë ¥í•´ì£¼ì„¸ìš”." type="text" name="title" /></div>
+		<div>ë‚´ìš© : <textarea placeholder="ë‚´ìš©ì„ ìž…ë ¥í•´ì£¼ì„¸ìš”." name="body" /></textarea></div>
 		<div>
-			<button type="submit">ÀÛ¼º</button>
+			<button type="submit">ìž‘ì„±</button>
 		</div>
-		<div><a href="list">¸®½ºÆ®·Î µ¹¾Æ°¡±â</a></div>
+		<div><a href="list">ë¦¬ìŠ¤íŠ¸ë¡œ ëŒì•„ê°€ê¸°</a></div>
 	</form>
 </body>
 </html>
