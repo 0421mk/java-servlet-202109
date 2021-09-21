@@ -19,8 +19,8 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ArticleListServlet
  */
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
+@WebServlet("/article/doDelete")
+public class ArticleDoDeleteServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,40 +46,18 @@ public class ArticleListServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(url, user, password);
 
-			int page = 1;
-
-			if (request.getParameter("page") != null && request.getParameter("page").length() != 0) {
-				try {
-					page = Integer.parseInt(request.getParameter("page"));
-				} catch (NumberFormatException e) {
-
-				}
-			}
-			
-			int itemsInAPage = 20;
-			int limitFrom = (page - 1) * itemsInAPage;
-
 			DBUtil dbUtil = new DBUtil(request, response);
+			
+			int id = Integer.parseInt(request.getParameter("id"));
 
 			SecSql sql = new SecSql();
-			
-			sql.append("SELECT COUNT(*) AS cnt FROM article");
-			int totalCount = dbUtil.selectRowIntValue(conn, sql);
 
-			sql = SecSql.from("SELECT *");
-			sql.append("from article");
-			sql.append("ORDER BY id DESC");
-			sql.append("LIMIT ?, ?", limitFrom, itemsInAPage);
-
-			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
+			sql.append("Delete FROM article WHERE id = ?", id);
 			
-			int totalPage = (int)Math.ceil((double)totalCount/itemsInAPage);
+			dbUtil.delete(conn, sql);
+			response.getWriter().append(String.format("<script>alert('%d번 글이 삭제되었습니다.'); location.replace('list')</script>", id));
 			
-			request.setAttribute("articleRows", articleRows);
-			request.setAttribute("page", page);
-			request.setAttribute("totalPage", totalPage);
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
-
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,7 +72,7 @@ public class ArticleListServlet extends HttpServlet {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -102,5 +80,4 @@ public class ArticleListServlet extends HttpServlet {
 		doGet(request, response);
 
 	}
-
 }

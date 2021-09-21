@@ -1,0 +1,21 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>게시물 작성</title>
+</head>
+<body>
+	<h1>게시물 작성</h1>
+	
+	<form action="doWrite" method="POST">
+		<div>제목 : <input placeholder="제목을 입력해주세요." type="text" name="title" /></div>
+		<div>내용 : <textarea placeholder="내용을 입력해주세요." name="body" /></textarea></div>
+		<div>
+			<button type="submit">작성</button>
+		</div>
+		<div><a href="list">리스트로 돌아가기</a></div>
+	</form>
+</body>
+</html>

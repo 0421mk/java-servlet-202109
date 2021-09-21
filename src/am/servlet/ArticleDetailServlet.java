@@ -21,7 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet("/article/detail")
 public class ArticleDetailServlet extends HttpServlet {
-
+	
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -70,6 +71,14 @@ public class ArticleDetailServlet extends HttpServlet {
 				}
 			}
 		}
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doGet(request, response);
+
 	}
 
 }
