@@ -15,13 +15,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class ArticleListServlet
  */
 @WebServlet("/article/list")
 public class ArticleListServlet extends HttpServlet {
-	
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -43,6 +44,27 @@ public class ArticleListServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBId(), Config.getDBPw());
 
+			HttpSession session = request.getSession();
+
+			boolean isLogined = false;
+			int loginedMemberId = -1;
+			Map<String, Object> loginedMemberRow = null;
+
+			// 세션이 존재한다면 다음과 같이 처리.
+			if (session.getAttribute("loginedMemberId") != null) {
+				loginedMemberId = (int) session.getAttribute("loginedMemberId");
+				isLogined = true;
+
+				// memberRow 생성.
+				SecSql sql = SecSql.from("SELECT * FROM member");
+				sql.append("WHERE id = ?", loginedMemberId);
+				loginedMemberRow = DBUtil.selectRow(conn, sql);
+			}
+
+			request.setAttribute("isLogined", isLogined);
+			request.setAttribute("loginedMemberId", loginedMemberId);
+			request.setAttribute("loginedMemberRow", loginedMemberRow);
+
 			int page = 1;
 
 			if (request.getParameter("page") != null && request.getParameter("page").length() != 0) {
@@ -52,14 +74,14 @@ public class ArticleListServlet extends HttpServlet {
 
 				}
 			}
-			
+
 			int itemsInAPage = 20;
 			int limitFrom = (page - 1) * itemsInAPage;
 
 			DBUtil dbUtil = new DBUtil(request, response);
 
 			SecSql sql = new SecSql();
-			
+
 			sql.append("SELECT COUNT(*) AS cnt FROM article");
 			int totalCount = dbUtil.selectRowIntValue(conn, sql);
 
@@ -69,9 +91,9 @@ public class ArticleListServlet extends HttpServlet {
 			sql.append("LIMIT ?, ?", limitFrom, itemsInAPage);
 
 			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
-			
-			int totalPage = (int)Math.ceil((double)totalCount/itemsInAPage);
-			
+
+			int totalPage = (int) Math.ceil((double) totalCount / itemsInAPage);
+
 			request.setAttribute("articleRows", articleRows);
 			request.setAttribute("page", page);
 			request.setAttribute("totalPage", totalPage);
@@ -91,7 +113,7 @@ public class ArticleListServlet extends HttpServlet {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
