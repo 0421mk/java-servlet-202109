@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import am.util.SecSql;
-
+import am.Config;
 import am.util.DBUtil;
+import am.util.SecSql;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,12 +27,9 @@ public class ArticleListServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
-		String url = "jdbc:mysql://localhost:3306/am?ServerTimeZone=UTC";
-		String user = "root";
-		String password = "";
 
 		// 커넥터 드라이버 활성화
-		String driverName = "com.mysql.cj.jdbc.Driver";
+		String driverName = Config.getDriverClassName();
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -44,7 +41,7 @@ public class ArticleListServlet extends HttpServlet {
 		Connection conn = null;
 
 		try {
-			conn = DriverManager.getConnection(url, user, password);
+			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBId(), Config.getDBPw());
 
 			int page = 1;
 
