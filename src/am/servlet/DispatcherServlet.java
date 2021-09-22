@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 import am.Config;
+import am.controller.ArticleController;
 import am.util.DBUtil;
 import am.util.SecSql;
 import jakarta.servlet.ServletException;
@@ -20,15 +20,27 @@ import jakarta.servlet.http.HttpSession;
 /**
  * Servlet implementation class ArticleListServlet
  */
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
-
+@WebServlet("/article/*")
+public class DispatcherServlet extends HttpServlet {
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html; charset=UTF-8");
-
+		request.setCharacterEncoding("UTF-8");
+		
+		String requestUri = request.getRequestURI();
+		String[] requestUriBits = requestUri.split("/");
+		
+		if (requestUriBits.length < 3) {
+			response.getWriter().append("올바른 요청이 아닙니다.");
+			return;
+		}
+		
+		String controllerName = requestUriBits[2];
+		String actionMethodName = requestUriBits[3];
+		
 		// 커넥터 드라이버 활성화
 		String driverName = Config.getDriverClassName();
 
@@ -43,7 +55,8 @@ public class ArticleListServlet extends HttpServlet {
 
 		try {
 			conn = DriverManager.getConnection(Config.getDBUrl(), Config.getDBId(), Config.getDBPw());
-
+			
+			// 모든 요청 전에 session 시작.
 			HttpSession session = request.getSession();
 
 			boolean isLogined = false;
@@ -64,40 +77,14 @@ public class ArticleListServlet extends HttpServlet {
 			request.setAttribute("isLogined", isLogined);
 			request.setAttribute("loginedMemberId", loginedMemberId);
 			request.setAttribute("loginedMemberRow", loginedMemberRow);
-
-			int page = 1;
-
-			if (request.getParameter("page") != null && request.getParameter("page").length() != 0) {
-				try {
-					page = Integer.parseInt(request.getParameter("page"));
-				} catch (NumberFormatException e) {
-
+			
+			if (controllerName.equals("article")) {
+				ArticleController controller = new ArticleController(request, response, conn);
+				
+				if (actionMethodName.equals("list")) {
+					controller.actionList();
 				}
 			}
-
-			int itemsInAPage = 20;
-			int limitFrom = (page - 1) * itemsInAPage;
-
-			DBUtil dbUtil = new DBUtil(request, response);
-
-			SecSql sql = new SecSql();
-
-			sql.append("SELECT COUNT(*) AS cnt FROM article");
-			int totalCount = dbUtil.selectRowIntValue(conn, sql);
-
-			sql = SecSql.from("SELECT *");
-			sql.append("from article");
-			sql.append("ORDER BY id DESC");
-			sql.append("LIMIT ?, ?", limitFrom, itemsInAPage);
-
-			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
-
-			int totalPage = (int) Math.ceil((double) totalCount / itemsInAPage);
-
-			request.setAttribute("articleRows", articleRows);
-			request.setAttribute("page", page);
-			request.setAttribute("totalPage", totalPage);
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -113,7 +100,7 @@ public class ArticleListServlet extends HttpServlet {
 			}
 		}
 	}
-
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
