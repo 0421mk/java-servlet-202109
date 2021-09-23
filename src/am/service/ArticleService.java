@@ -4,21 +4,22 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
+import am.dao.ArticleDao;
 import am.util.DBUtil;
 import am.util.SecSql;
 
 public class ArticleService {
-	private Connection conn;
+	private ArticleDao articleDao;
 
 	public ArticleService(Connection conn) {
-		this.conn = conn;
+		this.articleDao = new ArticleDao(conn);
 	}
 
 	public int getListTotalPage(int itemsInAPage) {
-		SecSql sql = new SecSql();
-
-		sql.append("SELECT COUNT(*) AS cnt FROM article");
-		int totalCount = DBUtil.selectRowIntValue(conn, sql);
+		
+		articleDao.getTotalCount();
+		
+		int totalCount = articleDao.getTotalCount();
 		int totalPage = (int) Math.ceil((double) totalCount / itemsInAPage);
 
 		return totalPage;
@@ -28,14 +29,7 @@ public class ArticleService {
 
 		int limitFrom = (page - 1) * itemsInAPage;
 
-		SecSql sql = new SecSql();
-
-		sql = SecSql.from("SELECT *");
-		sql.append("from article");
-		sql.append("ORDER BY id DESC");
-		sql.append("LIMIT ?, ?", limitFrom, itemsInAPage);
-
-		List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
+		List<Map<String, Object>> articleRows = articleDao.getArticleRows(itemsInAPage, limitFrom);
 
 		return articleRows;
 	}
