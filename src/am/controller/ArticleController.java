@@ -3,11 +3,9 @@ package am.controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
-import java.util.Map;
 
+import am.dto.Article;
 import am.service.ArticleService;
-import am.util.DBUtil;
-import am.util.SecSql;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,9 +41,9 @@ public class ArticleController {
 		
 		int totalPage = articleService.getListTotalPage(itemsInAPage);
 		
-		List<Map<String, Object>> articleRows = articleService.getArticleRowsForPrint(page, itemsInAPage);
+		List<Article> articles = articleService.getArticlesForPrint(page, itemsInAPage);
 
-		request.setAttribute("articleRows", articleRows);
+		request.setAttribute("articles", articles);
 		request.setAttribute("page", page);
 		request.setAttribute("totalPage", totalPage);
 		request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);

@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import am.dao.ArticleDao;
-import am.util.DBUtil;
-import am.util.SecSql;
+import am.dto.Article;
 
 public class ArticleService {
 	private ArticleDao articleDao;
@@ -25,12 +24,12 @@ public class ArticleService {
 		return totalPage;
 	}
 
-	public List<Map<String, Object>> getArticleRowsForPrint(int page, int itemsInAPage) {
+	public List<Article> getArticlesForPrint(int page, int itemsInAPage) {
 
 		int limitFrom = (page - 1) * itemsInAPage;
 
-		List<Map<String, Object>> articleRows = articleDao.getArticleRows(itemsInAPage, limitFrom);
+		List<Article> articles = articleDao.getArticles(itemsInAPage, limitFrom);
 
-		return articleRows;
+		return articles;
 	}
 }

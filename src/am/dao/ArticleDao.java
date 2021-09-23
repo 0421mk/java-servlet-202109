@@ -1,9 +1,11 @@
 package am.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import am.dto.Article;
 import am.util.DBUtil;
 import am.util.SecSql;
 
@@ -24,7 +26,7 @@ public class ArticleDao {
 		
 	}
 
-	public List<Map<String, Object>> getArticleRows(int itemsInAPage, int limitFrom) {
+	public List<Article> getArticles(int itemsInAPage, int limitFrom) {
 		
 		SecSql sql = new SecSql();
 
@@ -33,7 +35,15 @@ public class ArticleDao {
 		sql.append("ORDER BY id DESC");
 		sql.append("LIMIT ?, ?", limitFrom, itemsInAPage);
 		
-		return DBUtil.selectRows(conn, sql);
+		List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
+		
+		List<Article> articles = new ArrayList<>();
+		
+		for ( Map<String, Object> articleRow : articleRows ) {
+			articles.add(new Article(articleRow));
+		}
+		
+		return articles;
 		
 	}
 }
